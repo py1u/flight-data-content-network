@@ -1,0 +1,7 @@
+[project]
+name = "flight-content-network"
+version = "0.1.0"
+description = "dsci-510 project"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
