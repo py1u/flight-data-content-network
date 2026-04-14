@@ -236,19 +236,22 @@ def fetch_single_airport_simple(data: list[dict], keyword: str, threshold: int =
         return None
 
 # test
-bts_url = "https://www.transtats.bts.gov/NewAirportList.asp?Acntr=nv421465.n52&synt=SNPgf"
+bts_url = "https://www.transtats.bts.gov/NewAirportList.asp?Acntr=nv421465.n52&synt=SNPgf" # airport table of contents
 session = requests.Session()
 headers = { "User-Agent": "Mozilla/5.0", "Referer": "https://www.transtats.bts.gov/" }
 airports = get_bts_airports(ss=session, url=bts_url, agent=headers)
 
 # test
+# data is all fetched for bts data
 single_airport = fetch_single_airport_simple(data=airports, keyword="Los Angeles")
 
 # test
 single_airport_tables = get_bts_airport_details(url=single_airport[0][1], ss=session, agent=headers)
 
-for i in single_airport_tables:
-    print(i)
+# debugging terminal output
+print(tbl(single_airport_tables, tablefmt="psql", showindex=False))
+
+
 
 # df_test = pd.read_excel("data/table_01_44_032626.xlsx", sheet_name="1-44")
 # print(df_test["Table 1-44: Passengers Boarded at the Top 50 U.S. Airports"].head(10))
