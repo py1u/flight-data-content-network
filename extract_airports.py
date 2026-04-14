@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -6,18 +7,36 @@ from tabulate import tabulate
 
 
 class OurAirportsScraper:
-    def __init__(self):
-        pass
 
-    def request_content(self, url):
-        pass
+    def __init__(self):
+        self.top_airports_path = "data/top_airports_2025.csv" # given
+
+    # helper function to pull top 50 airports into a list
+    def get_airport_names(self):
+
+        airport_names = []
+
+        with open(self.top_airports_path, "r") as f:
+
+            header = next(f) # first line is a header -> skip
+            for line in f:
+
+                line = line.strip()
+                pattern = r"\((.*)\)"
+                match = re.search(pattern,line)
+
+                if match:
+                    airport_names.append(match.group(1))
+
+            return airport_names
+
 
     # get data for single airport
     def request_airport(self, url):
         pass
 
     # read all contents of airport metadata to csv
-    def read_to_csv(self:
+    def read_to_csv(self):
         pass
 
     # executes all pipeline
@@ -42,6 +61,10 @@ def main():
 
     scraper = OurAirportsScraper()
 
-    return scraper.extract_top_airports("https://view.officeapps.live.com/op/embed.aspx?src=https://www.bts.dot.gov/sites/bts.dot.gov/files/2026-03/table_01_44_032626.xlsx&wdAllowInteractivity=False&wdDownloadButton=False&ActiveCell=A1")
+    print(scraper.get_airport_names())
+
+
+if __name__ == "__main__":
+    main()
 
 
