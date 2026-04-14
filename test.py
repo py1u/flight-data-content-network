@@ -197,7 +197,7 @@ def get_bts_airport_details(ss: requests.Session, url: str, agent: dict, max_tri
     raise Exception(f"Failed to fetch data for airport after {max_tries} attempts")
 
 # function to pull simple data on airport for redirect use
-def fetch_single_airport_simple(data: list[dict], keyword: str, threshold: int = 70):
+def fetch_single_airport_simple(data: list[dict], keyword: str, threshold: int = 60):
 
     airport_map = {airport["name"]: airport for airport in data}
     names = list(airport_map.keys())
@@ -243,7 +243,9 @@ airports = get_bts_airports(ss=session, url=bts_url, agent=headers)
 
 # test
 # data is all fetched for bts data
-single_airport = fetch_single_airport_simple(data=airports, keyword="Los Angeles")
+# must search by the name of the airport not the IATA code
+user_query = input("enter a airport name or location NOT IATA code: ")
+single_airport = fetch_single_airport_simple(data=airports, keyword=user_query)
 
 # test
 single_airport_tables = get_bts_airport_details(url=single_airport[0][1], ss=session, agent=headers)
