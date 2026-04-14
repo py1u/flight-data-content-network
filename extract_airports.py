@@ -38,12 +38,14 @@ class OurAirportsScraper:
                 if match:
                     airport_names.append(match.group(1))
 
+            print(f"number of aviation hubs found: {len(airport_names)}")
             return airport_names
 
     # method to extract official IATA code for airports
+    # note: fetches all airports not top 50
     def get_airport_codes_by_names(self, airport_names: list):
 
-        html = fetch_html(self.airport_names_codes)
+        html = fetch_html(self.airport_names_codes) # call browser automation
         soup = BeautifulSoup(html, "html.parser")
 
         tables = soup.find_all("table")
@@ -84,17 +86,15 @@ class OurAirportsScraper:
     def read_to_csv(self):
         pass
 
-    # executes all pipeline functions
-    def run_pipeline(self):
-        pass
-
-
+# execution
 def main():
 
     scraper = OurAirportsScraper()
     airports = scraper.get_airport_names()
 
-    print(scraper.get_airport_codes_by_names(airports)[:10])
+    airports_codes = scraper.get_airport_codes_by_names(airports)
+
+    # debugging airports_codes
 
 if __name__ == "__main__":
     main()
