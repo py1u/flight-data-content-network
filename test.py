@@ -62,7 +62,7 @@ def _parse_summary_table(table):
 
     headers = []
     data = []
-    current_section = None
+    current_section = "Passenger Traffic" # by default sections should be passenger aggregated metrics
 
     for i, row in enumerate(rows):
 
@@ -161,8 +161,6 @@ def get_bts_airport_details(ss: requests.Session, url: str, agent: dict, max_tri
                 td = th.find_parent("tr").find("td")
                 table = td.find("table")
 
-                # container = th.find_parent("tr")
-                #
                 # tables = container.find_all("table")
                 #
                 # parsed_tables = []
@@ -197,7 +195,7 @@ def get_bts_airport_details(ss: requests.Session, url: str, agent: dict, max_tri
     raise Exception(f"Failed to fetch data for airport after {max_tries} attempts")
 
 # function to pull simple data on airport for redirect use
-def fetch_single_airport_simple(data: list[dict], keyword: str, threshold: int = 60):
+def fetch_single_airport_simple(data: list[dict], keyword: str, threshold: int = 70):
 
     airport_map = {airport["name"]: airport for airport in data}
     names = list(airport_map.keys())
@@ -251,7 +249,9 @@ single_airport = fetch_single_airport_simple(data=airports, keyword=user_query)
 single_airport_tables = get_bts_airport_details(url=single_airport[0][1], ss=session, agent=headers)
 
 # debugging terminal output
-print(tbl(single_airport_tables, tablefmt="psql", showindex=False))
+
+df_single_airport_df = pd.DataFrame(single_airport_tables, columns=["section", "metric", "year", "value", "pct_change", "rank"])
+print(tbl(df_single_airport_df, tablefmt="psql", headers="keys", showindex=False))
 
 
 
