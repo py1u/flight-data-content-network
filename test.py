@@ -75,6 +75,7 @@ def _parse_summary_table(table):
         if i == 0:
 
             headers = values
+            headers[0] = "metric"
             continue
 
         if len(cols) == 1 or cols[0].has_attr("colspan"):
@@ -87,6 +88,8 @@ def _parse_summary_table(table):
         data.append(row_dict)
 
     return data
+
+
 
 # same input data except for the url which must be a single airport
 def get_bts_airport_details(ss: requests.Session, url: str, agent: dict, max_tries: int = 5, backoff: int = 1.5):
@@ -198,7 +201,8 @@ single_airport = fetch_single_airport_simple(data=airports, keyword="Los Angeles
 # test
 single_airport_tables = get_bts_airport_details(url=single_airport[0][1], ss=session, agent=headers)
 
-print(pd.DataFrame(single_airport_tables).head())
+for i in single_airport_tables:
+    print(i)
 
 # df_test = pd.read_excel("data/table_01_44_032626.xlsx", sheet_name="1-44")
 # print(df_test["Table 1-44: Passengers Boarded at the Top 50 U.S. Airports"].head(10))
