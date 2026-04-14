@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import time
-from fuzzysearch import find_near_matches
+from rapidfuzz import process, fuzz
 
 from tabulate import tabulate as tbl
 
@@ -20,6 +20,7 @@ def get_bts_airports(ss: requests.Session, url: str, agent: dict, max_tries: int
             if res.status_code == 200:
                 soup = BeautifulSoup(res.text, "html.parser")
                 airports = []
+                count = 1
 
                 # look for all links towards page links(anchor tags)
                 for a in soup.find_all("a", href=True):
@@ -32,9 +33,12 @@ def get_bts_airports(ss: requests.Session, url: str, agent: dict, max_tries: int
                         airport_name = a.text.strip()
 
                         airports.append({
+                            "index": count,
                             "name": airport_name,
                             "url": extracted_url
                         })
+
+                    count += 1
 
                 print("Successfully fetched!")
                 return airports
@@ -110,13 +114,32 @@ headers = { "User-Agent": "Mozilla/5.0", "Referer": "https://www.transtats.bts.g
 
 airports = get_bts_airports(ss=session, url=bts_url, agent=headers)
 
-def fetch_single_airport_simple(keyword: str):
-    for airport in airports:
-        if keyword in airport["name"]: # testing for ATL
-            print(airport)
-            break
+# function to pull simple data on airport for redirect use
+def fetch_single_airport_simple(data: list[dict], keyword: str, threshold: int = 70):
 
-fetch_single_airport_simple("Hartsfield")
+    airport_map = {airport["name"]: airport for airport in data}
+    names = list(airport_map.keys())
+
+    # only extract single best match
+    match, score, _ = process.extractOne(
+        keyword,
+        names,
+        scorer=fuzz.WRatio
+    )
+
+    # if a search query is too small
+    if score >= threshold:
+        result = airport_map[match]
+        print(f"Match: {match} (score: {score})")
+        return result
+
+    else:
+        print(f"No good match found (best: {match}, score: {score})")
+        print("try to use more words or letters.")
+        return None
+
+# test
+fetch_single_airport_simple(data=airports, keyword="Los Angeles")
 
 # df_test = pd.read_excel("data/table_01_44_032626.xlsx", sheet_name="1-44")
 # print(df_test["Table 1-44: Passengers Boarded at the Top 50 U.S. Airports"].head(10))
