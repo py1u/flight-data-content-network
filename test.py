@@ -90,6 +90,49 @@ def _parse_summary_table(table):
     return data
 
 
+# helper to normalize data for tabular format
+def _normalize_value(val):
+    if not val:
+        return None
+
+    # clean data of markings
+    val = val.replace(',', '')
+
+    if val.endswith('k'):
+        return float(val[:-1]) * 1_000
+
+    if val.endswith('m'):
+        return float(val[:-1]) * 1_000_000
+
+    if '%' in val:
+        return float(val.replace('%', ''))
+
+    try:
+        return float(val)
+
+    except:
+        return val
+
+# helper function to clean up table label and output format
+def _to_tidy_format(data):
+    tidy = []
+
+    for row in data:
+        base = {
+            "section": row["section"],
+            "metric": row["metric"],
+            "pct_change": _normalize_value(row["%Chg"]),
+            "rank": _normalize_value(row["Rank***"])
+        }
+
+        for year_col in ["2025**", "2026**"]:
+            tidy.append({
+                **base,
+                "year": int(year_col[:4]),
+                "value": _normalize_value(row[year_col])
+            })
+
+    return tidy
 
 # same input data except for the url which must be a single airport
 def get_bts_airport_details(ss: requests.Session, url: str, agent: dict, max_tries: int = 5, backoff: int = 1.5):
@@ -137,8 +180,11 @@ def get_bts_airport_details(ss: requests.Session, url: str, agent: dict, max_tri
                 #
                 # return parsed_tables
 
-                parsed_data = _parse_summary_table(table)
-                return parsed_data
+                # call helper functions to prepare data
+                parsed = _parse_summary_table(table)
+                tidy_data = _to_tidy_format(parsed)
+
+                return tidy_data
 
             else:
                 print(f"Attempt {attempt + 1} failed with status code: {res.status_code}")
