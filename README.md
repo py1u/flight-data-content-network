@@ -1,4 +1,16 @@
-# flight-data-content-network
+# Project Intermediate Submission
+
+Peter Lu
+
+University of Southern California
+
+DSCI 510: Principles of Programming for Data Science
+
+USD ID: 4353709442
+
+April 14, 2026
+
+---
 
 ### Getting Started
 
