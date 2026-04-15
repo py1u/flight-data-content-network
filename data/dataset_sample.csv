@@ -1,0 +1,48 @@
+name,city_state,country,region,iata_code,icao_code,facility_type,latitude,longitude,elevation_ft,elevation_m
+Hartsfield-Jackson Atlanta International,"Atlanta, GA",USA,mainland US,ATL,KATL,large_airport,33.6367,-84.428101,1026,313
+Dallas/Fort Worth International,"Dallas/Fort Worth, TX",USA,mainland US,DFW,KDFW,large_airport,32.896801,-97.038002,607,185
+Chicago O'Hare International,"Chicago, IL",USA,mainland US,ORD,KORD,large_airport,41.9786,-87.9048,680,207
+Denver International,"Denver, CO",USA,mainland US,DEN,KDEN,large_airport,39.860027,-104.673792,5431,1655
+Los Angeles International,"Los Angeles, CA",USA,mainland US,LAX,KLAX,large_airport,33.942501,-118.407997,125,38
+John F. Kennedy International,"New York, NY",USA,mainland US,JFK,KJFK,large_airport,40.639447,-73.779317,13,4
+Orlando International,"Orlando, FL",USA,mainland US,MCO,KMCO,large_airport,28.429399,-81.308998,96,29
+McCarran International,"Las Vegas, NV",USA,mainland US,LAS,KLAS,large_airport,36.083361,-115.151817,2181,665
+Miami International,"Miami, FL",USA,mainland US,MIA,KMIA,large_airport,25.796011,-80.289751,8,2
+San Francisco International,"San Francisco, CA",USA,mainland US,SFO,KSFO,large_airport,37.619806,-122.374821,13,4
+Charlotte Douglas International,"Charlotte, NC",USA,mainland US,CLT,KCLT,large_airport,35.214001,-80.9431,748,228
+Seattle/Tacoma International,"Seattle, WA",USA,mainland US,SEA,KSEA,large_airport,47.447943,-122.310276,433,132
+Phoenix Sky Harbor International,"Phoenix, AZ",USA,mainland US,PHX,KPHX,large_airport,33.435302,-112.005905,1135,346
+Newark Liberty International,"Newark, NJ",USA,mainland US,EWR,KEWR,large_airport,40.6894,-74.170545,18,5
+George Bush Intercontinental/Houston,"Houston, TX",USA,mainland US,IAH,KIAH,large_airport,29.9844,-95.3414,97,30
+Logan International,"Billings, MT",USA,mainland US,BIL,KBIL,medium_airport,45.808932,-108.541242,3652,1113
+Minneapolis-St Paul International,"Minneapolis, MN",USA,mainland US,MSP,KMSP,large_airport,44.880081,-93.221741,841,256
+Detroit Metro Wayne County,"Detroit, MI",USA,mainland US,DTW,KDTW,large_airport,42.21377,-83.353786,645,197
+LaGuardia,"New York, NY",USA,mainland US,LGA,KLGA,large_airport,40.777199,-73.872597,21,6
+Fort Lauderdale-Hollywood International,"Fort Lauderdale, FL",USA,mainland US,FLL,KFLL,large_airport,26.072599,-80.152702,9,3
+Philadelphia International,"Philadelphia, PA",USA,mainland US,PHL,KPHL,large_airport,39.871899,-75.241096,36,11
+Washington Dulles International,"Washington, DC",USA,mainland US,IAD,KIAD,large_airport,38.9445,-77.455803,312,95
+Salt Lake City International,"Salt Lake City, UT",USA,mainland US,SLC,KSLC,large_airport,40.78886,-111.979866,4227,1288
+San Diego International,"San Diego, CA",USA,mainland US,SAN,KSAN,large_airport,32.733601,-117.190002,17,5
+Nashville International,"Nashville, TN",USA,mainland US,BNA,KBNA,large_airport,36.1245,-86.6782,599,183
+Baltimore/Washington International Thurgood Marshall,"Baltimore, MD",USA,mainland US,BWI,KBWI,large_airport,39.1754,-76.668297,146,45
+Tampa International,"Tampa, FL",USA,mainland US,TPA,KTPA,large_airport,27.9755,-82.533203,26,8
+Ronald Reagan Washington National,"Washington, DC",USA,mainland US,DCA,KDCA,large_airport,38.8521,-77.037697,15,5
+Austin - Bergstrom International,"Austin, TX",USA,mainland US,AUS,KAUS,large_airport,30.197535,-97.662015,542,165
+Chicago Midway International,"Chicago, IL",USA,mainland US,MDW,KMDW,large_airport,41.785999,-87.752403,620,189
+Portland International,"Portland, OR",USA,mainland US,PDX,KPDX,large_airport,45.588699,-122.598,31,9
+Dallas Love Field,"Dallas, TX",USA,mainland US,DAL,KDAL,large_airport,32.844776,-96.847653,487,148
+Raleigh-Durham International,"Raleigh/Durham, NC",USA,mainland US,RDU,KRDU,large_airport,35.878659,-78.7873,435,133
+Sacramento International,"Sacramento, CA",USA,mainland US,SMF,KSMF,large_airport,38.6954,-121.591003,27,8
+William P Hobby,"Houston, TX",USA,mainland US,HOU,KHOU,large_airport,29.645336,-95.276812,46,14
+Luis Munoz Marin International,"San Juan, PR",USA,Contiguous US,SJU,TJSJ,large_airport,18.4394,-66.001801,9,3
+Louis Armstrong New Orleans International,"New Orleans, LA",USA,mainland US,MSY,KMSY,large_airport,29.993401,-90.264673,4,1
+Kansas City International,"Kansas City, MO",USA,mainland US,MCI,KMCI,large_airport,39.301699,-94.713893,1026,313
+John Wayne Airport-Orange County,"Santa Ana, CA",USA,mainland US,SNA,KSNA,large_airport,33.675063,-117.869281,56,17
+Southwest Florida International,"Fort Myers, FL",USA,mainland US,RSW,KRSW,large_airport,26.534685,-81.752816,30,9
+Norman Y. Mineta San Jose International,"San Jose, CA",USA,mainland US,SJC,KSJC,large_airport,37.362452,-121.929188,62,19
+San Antonio International,"San Antonio, TX",USA,mainland US,SAT,KSAT,large_airport,29.533701,-98.469803,809,247
+Indianapolis International,"Indianapolis, IN",USA,mainland US,IND,KIND,large_airport,39.7173,-86.294403,797,243
+Cleveland-Hopkins International,"Cleveland, OH",USA,mainland US,CLE,KCLE,large_airport,41.411701,-81.8498,791,241
+Pittsburgh International,"Plattsburgh, NY",USA,mainland US,PBG,KPBG,medium_airport,44.650902,-73.468102,234,71
+Metropolitan Oakland International,"Oakland, CA",USA,mainland US,OAK,KOAK,large_airport,37.720085,-122.221184,9,3
+Cincinnati/Northern Kentucky International,"Cincinnati, OH",USA,mainland US,CVG,KCVG,large_airport,39.048801,-84.667801,896,273
