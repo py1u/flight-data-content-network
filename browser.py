@@ -15,17 +15,17 @@ def fetch_html(url: str):
     # browser is run on chromium
     with sync_playwright() as p:
 
-        print("starting playwright browser..")
+        print("(1): starting playwright browser..")
 
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         page.goto(url, wait_until="networkidle")
 
-        print("page(HTML) content received!")
+        print("(2): page(HTML) content received!")
         html = page.content() # returned html content
 
-        print("closing playwright browser.")
+        print("(3): closing playwright browser.")
         browser.close()
 
     return html
