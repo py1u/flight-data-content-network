@@ -12,21 +12,108 @@ April 14, 2026
 
 ---
 
-### Getting Started
+## Getting Started
 
-In order to run the program run the extract_airports.py file
+This project uses a **Python virtual environment (.venv)** for dependency isolation. You can set it up using either **uv (recommended)** or standard `venv + pip`.
 
-```python
-python extract_airports.py
+---
+
+## Option 1: Using `uv` (Recommended)
+
+### 1. Install dependencies + create `.venv`
+
+```bash
+uv sync
 ```
 
-CLI:
+This automatically:
 
-```python
+* Creates `.venv`
+* Installs all dependencies from `pyproject.toml` / lock file
+
+### 2. Activate environment
+
+```bash
+source .venv/bin/activate
+```
+
+### 3. (If needed) install from requirements.txt
+
+```bash
+uv pip install -r requirements.txt
+```
+
+---
+
+## Option 2: Without `uv` (Standard Python venv)
+
+### 1. Create virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 2. Activate environment
+
+**Mac/Linux**
+
+```bash
+source .venv/bin/activate
+```
+
+**Windows (PowerShell)**
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## ️ Running the Program
+
+Run the scraper:
+
+```bash
+python scraper.py
+```
+
+---
+
+##  CLI Usage
+
+### Scrape a limited number of airports
+
+```bash
 python scraper.py --scrape 10
+```
+
+### Save output to CSV
+
+```bash
 python scraper.py --save my_scraped_data.csv
+```
+
+### Save to nested directory
+
+```bash
 python scraper.py --save dir1/dir2/my_scraped_data.csv
 ```
+
+---
+
+## Notes
+
+* Ensure `.venv` is activated before running any commands
+* `uv` is recommended for faster dependency resolution
+* Output format is configurable via CLI flags
+
+---
 
 
 
