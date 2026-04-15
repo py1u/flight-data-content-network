@@ -31,31 +31,27 @@ class OurAirportsScraper:
 
     # helper function to pull top 50 airports into a list
     # limit is a parameter to determine limited N records
-    def get_top_airports(self, n_size: int, limit=False):
+    def get_top_airports(self, n_size: int = None, limit: bool = False):
 
         airport_names = []
 
         with open(self.top_airports_path, "r") as f:
+            header = next(f)  # skip header
 
-            count = 0
-            header = next(f) # first line is a header -> skip
             for line in f:
-
-                # early stopping condition
-                if count >= n_size:
-                    break
-
                 line = line.strip()
+
                 pattern = r"\((.*)\)"
-                match = re.search(pattern,line)
+                match = re.search(pattern, line)
 
                 if match:
                     airport_names.append(match.group(1))
 
-                count += 1
+                if limit and n_size is not None and len(airport_names) >= n_size:
+                    break
 
-            print(f"number of aviation hubs: {len(airport_names)}")
-            return airport_names
+        print(f"number of aviation hubs: {len(airport_names)}")
+        return airport_names
 
     # method to extract official IATA code for airports
     # note: fetches all airports not top 50
@@ -255,58 +251,53 @@ class OurAirportsScraper:
 
         data.to_csv(path, index=False)
 # execution
+
 def main():
+
+    # create scraper instance
     scraper = OurAirportsScraper()
-
-    # note: using argparse instead of sys
     parser = argparse.ArgumentParser(description="scraper cli")
-    parser.add_argument(
-        "--scrape",
-        type=int,
-        help="Number of top airports to scrape"
-    )
-    parser.add_argument(
-        "--save",
-        type=str,
-        help="Path to save scraped dataset (ex: data/output.csv)"
-    )
 
-
+    parser.add_argument("--scrape", type=int, help="Number of top airports")
+    parser.add_argument("--save", type=str, help="Output file path")
 
     args = parser.parse_args()
-    scrape_n = args.scrape
 
-    if scrape_n is not None:
-        airports = scraper.get_top_airports(scrape_n, limit=True)
-    else:
-        airports = scraper.get_top_airports(None, limit=False)
+    print("(1) fetching top airports")
+    airports = scraper.get_top_airports(
+        args.scrape,
+        limit=(args.scrape is not None)
+    )
 
+    print("(2) fetching airport codes")
+    airports_codes = scraper.get_airport_codes_by_names(airports)
+    top_airport_names_codes = scraper.get_top_airport_names_codes(
+        airports,
+        airports_codes
+    )
 
-    airports_codes = scraper.get_airport_codes_by_names(airports) # all airports(US)
-    top_airport_names_codes = scraper.get_top_airport_names_codes(airports, airports_codes)
+    codes_found = [d.get("code", "Unknown") for d in top_airport_names_codes]
 
-    # get top airports and codes
-    names_found = [ d.get("names", "Unknown") for d in top_airport_names_codes]
-    codes_found = [ d.get("code", "Unknown") for d in top_airport_names_codes]
-    # print(codes_found)
+    print("(3) fetching airport details")
+    airport_detailed = scraper.get_our_airports_detailed(codes_found)
 
-    print(tabulate(top_airport_names_codes, tablefmt="psql", headers="keys"))
-
-    airport_detailed = scraper.get_our_airports_detailed(codes_found[:5])
-
-    # debugging
-    for record in airport_detailed:
-        print(record)
-
-    # join resulting tables
     df_l = pd.DataFrame(top_airport_names_codes)
     df_r = pd.DataFrame(airport_detailed)
-    df_joined = df_l.merge(df_r, how="inner", left_on="code", right_on="itao_code")
-    print(tabulate(df_joined, tablefmt="psql", showindex=False))
+
+    df_joined = df_l.merge(
+        df_r,
+        how="inner",
+        left_on="code",
+        right_on="icao_code"
+    )
+
+    df_joined = df_joined.drop(columns=["code"], errors="ignore")
 
     if args.save:
         scraper.read_to_csv(df_joined, args.save)
         print(f"Saved data to {args.save}")
+    else:
+        print(tabulate(df_joined, tablefmt="psql", showindex=False, headers="keys"))
 
 
 if __name__ == "__main__":
