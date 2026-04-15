@@ -4,6 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import argparse
+from pathlib import Path
 import pandas as pd
 from tabulate import tabulate
 from browser import fetch_html
@@ -26,6 +27,7 @@ class OurAirportsScraper:
                       "Chrome/120.0.0.0 Safari/537.36",
                       "Accept-Language": "en-US,en;q=0.9",
                      }
+        self.writeout_path = "extract/"
 
     # helper function to pull top 50 airports into a list
     # limit is a parameter to determine limited N records
@@ -164,14 +166,10 @@ class OurAirportsScraper:
     # method for extracting our airports detailed information about airports
     def get_our_airports_detailed(self, codes: list):
 
-        # store resulting records
         results = []
-
         session = requests.Session()
 
-        for code in codes[:5]:
-
-            # url path
+        for code in codes:
             url = f"{self.our_airports_path}{code}/"
 
             try:
@@ -183,19 +181,22 @@ class OurAirportsScraper:
                 continue
 
             soup = BeautifulSoup(res.text, "html.parser")
-
             table = soup.find("table", class_="small table table-striped")
 
             if not table:
                 continue
 
             airport_data = {
-                "code": code
+                "iata_code": None,
+                "icao_code": None,
+                "facility_type": None,
+                "latitude": None,
+                "longitude": None,
+                "elevation_ft": None,
+                "elevation_m": None,
             }
 
-            rows = table.find_all("tr")
-
-            for row in rows:
+            for row in table.find_all("tr"):
                 th = row.find("th")
                 td = row.find("td")
 
@@ -203,58 +204,74 @@ class OurAirportsScraper:
                     continue
 
                 key = th.get_text(strip=True).lower()
+                value = td.get_text(" ", strip=True)
 
-                if key == "tags":
-                    tags = [a.get_text(strip=True) for a in td.find_all("a") if a.get("href", "").startswith("/tags")]
-                    airport_data["tags"] = tags
+                if key == "iata code":
 
-                elif key == "location":
+                    airport_data["iata_code"] = value
 
-                    parts = [x.strip() for x in td.stripped_strings]
-                    parts = [p.replace(",", "") for p in parts]
+                elif key == "icao code":
 
-                    airport_data["city"] = parts[0] if len(parts) > 0 else None
-                    airport_data["region"] = parts[1] if len(parts) > 1 else None
-                    airport_data["country"] = parts[2] if len(parts) > 2 else None
+                    airport_data["icao_code"] = value
+
+                elif key == "facility type":
+
+                    airport_data["facility_type"] = value
 
                 elif key == "coordinates":
 
-                    # parse split strings
-                    coord_text = list(td.stripped_strings)[0]
+                    # parse coordinate pair into separate columns
+                    coord_text = value.split()[0]
                     lat, lon = coord_text.split(",")
 
                     airport_data["latitude"] = float(lat)
                     airport_data["longitude"] = float(lon)
 
                 elif key == "field elevation":
-                    elevation = td.get_text(" ", strip=True)
-                    airport_data["elevation"] = elevation
 
-                else:
-                    value = td.get_text(" ", strip=True)
+                    clean = value.replace("\xa0", " ")
 
-                    key = key.replace(" ", "_").replace("?", "").replace("/", "").lower()
+                    # html raw content clean up with regex
+                    ft_match = re.search(r"([\d,]+)\s*ft", clean)
+                    m_match = re.search(r"([\d,]+)\s*m", clean)
 
-                    airport_data[key] = value
+                    if ft_match:
+                        airport_data["elevation_ft"] = int(ft_match.group(1).replace(",", ""))
+
+                    if m_match:
+                        airport_data["elevation_m"] = int(m_match.group(1).replace(",", ""))
 
             results.append(airport_data)
 
         return results
 
     # read all contents of airport metadata to JSON
-    def read_to_csv(self):
-        pass
+    def read_to_csv(self, data: pd.DataFrame, output_path: str):
 
+        # note: using Path lib instead of os
+        path = Path(output_path)
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        data.to_csv(path, index=False)
 # execution
 def main():
     scraper = OurAirportsScraper()
 
+    # note: using argparse instead of sys
     parser = argparse.ArgumentParser(description="scraper cli")
     parser.add_argument(
         "--scrape",
         type=int,
         help="Number of top airports to scrape"
     )
+    parser.add_argument(
+        "--save",
+        type=str,
+        help="Path to save scraped dataset (ex: data/output.csv)"
+    )
+
+
 
     args = parser.parse_args()
     scrape_n = args.scrape
@@ -276,7 +293,21 @@ def main():
     print(tabulate(top_airport_names_codes, tablefmt="psql", headers="keys"))
 
     airport_detailed = scraper.get_our_airports_detailed(codes_found[:5])
-    print(airport_detailed[0])
+
+    # debugging
+    for record in airport_detailed:
+        print(record)
+
+    # join resulting tables
+    df_l = pd.DataFrame(top_airport_names_codes)
+    df_r = pd.DataFrame(airport_detailed)
+    df_joined = df_l.merge(df_r, how="inner", left_on="code", right_on="itao_code")
+    print(tabulate(df_joined, tablefmt="psql", showindex=False))
+
+    if args.save:
+        scraper.read_to_csv(df_joined, args.save)
+        print(f"Saved data to {args.save}")
+
 
 if __name__ == "__main__":
     main()
