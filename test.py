@@ -242,7 +242,7 @@ airports = get_bts_airports(ss=session, url=bts_url, agent=headers)
 # test
 # data is all fetched for bts data
 # must search by the name of the airport not the IATA code
-user_query = input("enter a airport name or location NOT IATA code: ")
+user_query = input("enter a airport name or location NOT IATA code: 3414132432rwe ")
 single_airport = fetch_single_airport_simple(data=airports, keyword=user_query)
 
 # test
