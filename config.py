@@ -1,0 +1,5 @@
+TITLE = "Predicting Weather-Driven Anomalies in US Aviation Networks"
+AUTHOR = "Peter Lu"
+UNIVERSITY = "University of Southern California"
+COURSE = "DSCI 510: Principles of Programming for Data Science"
+DATE = "May 10, 2026"
