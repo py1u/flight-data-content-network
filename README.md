@@ -2,7 +2,6 @@
 
 **Author:** Peter Lu  
 **University:** University of Southern California  
-**Course:** DSCI 510: Principles of Programming for Data Science  
 **Date:** May 10, 2026  
 
 ---
